@@ -21,14 +21,41 @@ export function ContactSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate responsive submission feedback without external API dependency
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          subject: formData.get("subject"),
+          message: formData.get("message"),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send message.");
+      }
+
       setFormSubmitted(true);
-    }, 600);
+      form.reset();
+    } catch (error) {
+      console.error("Contact form submission error:", error);
+      alert("Unable to send your message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -94,7 +121,7 @@ export function ContactSection() {
                   </span>
                   <div className="flex flex-col gap-2">
                     <a
-                      href="https://github.com/[YOUR GITHUB]"
+                      href="https://github.com/dipankarprabhat86-ux"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-between p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/60 transition-colors text-sm text-zinc-800 dark:text-zinc-200"
@@ -107,7 +134,7 @@ export function ContactSection() {
                     </a>
 
                     <a
-                      href="https://linkedin.com/in/[YOUR LINKEDIN]"
+                      href="https://www.linkedin.com/in/dipankar-prabhat-922a2a396/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-between p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/60 transition-colors text-sm text-zinc-800 dark:text-zinc-200"
@@ -171,6 +198,7 @@ export function ContactSection() {
                         </label>
                         <input
                           id="name"
+                          name="name"
                           type="text"
                           required
                           placeholder="e.g. Alex Morgan"
@@ -187,6 +215,7 @@ export function ContactSection() {
                         </label>
                         <input
                           id="email"
+                          name="email"
                           type="email"
                           required
                           placeholder="alex@example.com"
@@ -204,6 +233,7 @@ export function ContactSection() {
                       </label>
                       <input
                         id="subject"
+                        name="subject"
                         type="text"
                         required
                         placeholder="Inquiry regarding Engineering Role / Project"
@@ -220,6 +250,7 @@ export function ContactSection() {
                       </label>
                       <textarea
                         id="message"
+                        name="message"
                         required
                         rows={4}
                         placeholder="Tell me about your team, project, or timeline..."
