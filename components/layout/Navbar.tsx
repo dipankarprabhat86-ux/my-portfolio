@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Menu, FileText } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/Button";
@@ -9,11 +10,11 @@ import { MobileMenu } from "@/components/layout/MobileMenu";
 import { portfolioData } from "@/data/portfolio";
 
 const NAV_LINKS = [
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Experience", href: "#experience" },
-  { name: "Contact", href: "#contact" },
+  { name: "About", href: "/about" },
+  { name: "Skills", href: "/skills" },
+  { name: "Projects", href: "/projects" },
+  { name: "Experience", href: "/experience" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export function Navbar() {
@@ -24,7 +25,9 @@ export function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -48,17 +51,18 @@ export function Navbar() {
         <Container>
           <div className="flex h-16 items-center justify-between">
             {/* Brand Logo / Monogram */}
-            <a
-              href="#"
+            <Link
+              href="/"
               className="flex items-center gap-2 group font-mono text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded px-1"
             >
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-bold transition-transform group-hover:scale-105">
                 /&gt;
               </span>
+
               <span className="tracking-tight hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {portfolioData.profile.name}
               </span>
-            </a>
+            </Link>
 
             {/* Desktop Navigation Links */}
             <nav
@@ -66,17 +70,17 @@ export function Navbar() {
               className="hidden md:flex items-center gap-1"
             >
               {NAV_LINKS.map((link) => (
-                <a
+                <Link
                   key={link.href}
                   href={link.href}
                   className="rounded-md px-3 py-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 transition-colors hover:text-zinc-950 dark:hover:text-zinc-50 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </nav>
 
-            {/* Right utilities: Theme Toggle, Resume CTA, Mobile Menu Trigger */}
+            {/* Right utilities */}
             <div className="flex items-center gap-2 sm:gap-3">
               <ThemeToggle />
 

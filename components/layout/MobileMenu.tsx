@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { X, FileText, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -29,6 +30,7 @@ export function MobileMenu({
     } else {
       document.body.style.overflow = "unset";
     }
+
     return () => {
       document.body.style.overflow = "unset";
     };
@@ -41,7 +43,9 @@ export function MobileMenu({
         onClose();
       }
     };
+
     window.addEventListener("keydown", handleKeyDown);
+
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
@@ -58,6 +62,7 @@ export function MobileMenu({
         <span className="font-mono text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
           Navigation
         </span>
+
         <button
           type="button"
           onClick={onClose}
@@ -72,14 +77,14 @@ export function MobileMenu({
         <ul className="flex flex-col space-y-4">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
                 onClick={onClose}
                 className="flex items-center justify-between py-3 text-lg font-medium text-zinc-800 dark:text-zinc-200 hover:text-blue-600 dark:hover:text-blue-400 border-b border-zinc-100 dark:border-zinc-900 transition-colors"
               >
                 <span>{link.name}</span>
                 <ArrowRight className="h-4 w-4 text-zinc-400" />
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
